@@ -1,5 +1,6 @@
 package App::ToSequel;
 
+#ABSTRACT: Convert formatted text files into SQL Statements
 use strict;
 use warnings;
 
