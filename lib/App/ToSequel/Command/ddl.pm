@@ -90,8 +90,10 @@ sub column_lengths {
 
   while(my @row = $self->csv->get_row) {
     for my $i (0..$#row) {
-      if(!defined(${$self->columns}[$i]->{length}) || ${$self->columns}[$i]->{length} < length($row[$i])) {
-        ${$self->columns}[$i]->{length} = length($row[$i]);
+      if(defined($row[$i])) {
+        if(!defined(${$self->columns}[$i]->{length}) || ${$self->columns}[$i]->{length} < length($row[$i])) {
+          ${$self->columns}[$i]->{length} = length($row[$i]);
+        }
       }
     }
   }
