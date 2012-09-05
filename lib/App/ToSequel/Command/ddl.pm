@@ -7,6 +7,14 @@ use warnings;
 
 use Text::xSV;
 
+sub usage_desc { "tosequel %o [csvfile]" }
+
+sub opt_spec {
+  return (
+    [ "tablename=s",  "tablename to create", ],
+  );
+}
+
 =attr tablename
 
 =cut
@@ -54,6 +62,13 @@ sub csv {
 
 sub execute {
   my ($self, $opt, $args) = @_;
+
+  $self->tablename($opt->tablename) if $opt->tablename;
+  $self->csv($args->[0]);
+
+  $self->extract_columns;
+  $self->column_lengths;
+  print $self->ddl;
 }
 
 =method extract_columns
