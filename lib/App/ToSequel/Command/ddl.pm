@@ -82,5 +82,20 @@ sub column_lengths {
   }
 }
 
+sub ddl {
+  my ($self) = @_;
+
+  my $ddl = 'CREATE TABLE ' . $self->tablename . "\n";
+  for my $column (@{$self->columns}) {
+    $ddl .= "\t" . $column->{name} . "\t";
+    $ddl .= $column->{datatype} ? $column->{datatype} : 'VARCHAR';
+    $ddl .= '(' . $column->{length} . ')';
+    $ddl .= "\n";
+  }
+  $ddl .= ";\n";
+
+  return $ddl;
+}
+
 
 1;

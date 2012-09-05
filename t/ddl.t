@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 
-use Test::More tests => 4;
+use Test::More tests => 5;
 use Test::Deep;
 
 use_ok('App::ToSequel::Command::ddl');
@@ -29,3 +29,6 @@ cmp_deeply(
     { name => 'ColumnC', position => 2, length => 9 },
   ], 'column data lengths'
 );
+
+$ddl->tablename('simpletable');
+is($ddl->ddl,"CREATE TABLE simpletable\n\tColumnA\tVARCHAR(16)\n\tColumnB\tVARCHAR(19)\n\tColumnC\tVARCHAR(9)\n;\n",'simple ddl');
