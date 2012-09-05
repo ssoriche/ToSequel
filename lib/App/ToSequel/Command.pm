@@ -66,7 +66,7 @@ Create a Text::xSV object from the filename.
 sub csv {
   my ($self, $filename) = @_;
   if ($filename) {
-    $self->{csv} = Text::xSV->new;
+    $self->{csv} = Text::xSV->new( warning_handler => sub {} );
     $self->{csv}->open_file($filename);
   }
 
