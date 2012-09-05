@@ -7,6 +7,18 @@ use warnings;
 
 use Text::xSV;
 
+=attr tablename
+
+=cut
+sub tablename {
+  my ($self, $tablename) = @_;
+  if ($tablename) {
+    $self->{tablename} = $tablename;
+  }
+
+  return $self->{tablename};
+}
+
 =attr columns
   [
     { name
