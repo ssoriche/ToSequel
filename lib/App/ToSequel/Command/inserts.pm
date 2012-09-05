@@ -27,11 +27,18 @@ sub inserts {
   while (my $row = $self->csv->fetchrow_hash) {
     $inserts .= 'INSERT INTO ';
     $inserts .= $self->tablename;
-    $inserts .= '(';
+    $inserts .= ' (';
     $inserts .= join(',',keys(%$row));
-    $inserts .= ") VALUES ('";
-    $inserts .= join("','",values(%$row));
-    $inserts .= "');\n";
+    $inserts .= ") VALUES (";
+    my $first = 1;
+    for my $key (keys(%$row)) {
+      my $value = $row->{$key} // '';
+      $value =~ s/'/''/g;
+      $inserts .= $first ? '' : ',';
+      $inserts .= "'$value'";
+      $first = 0;
+    }
+    $inserts .= ");\n";
   }
 
   return $inserts;

@@ -39,7 +39,7 @@ $ddl->extract_columns;
 cmp_deeply(
   $ddl->columns,
   [
-    { name => 'ColumnA', position => 0, length => 16 },
+    { name => 'ColumnA', position => 0, length => 23 },
     { name => 'ColumnB', position => 1, length => 19 },
     { name => 'ColumnC', position => 2, length => 9 },
   ], 'column data lengths w/ mismatched columns'
