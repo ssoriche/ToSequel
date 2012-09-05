@@ -7,6 +7,15 @@ use warnings;
 
 use Text::xSV;
 
+sub opt_spec {
+  my ( $class, $app ) = @_;
+  return (
+    [ 'help' => "This usage screen" ],
+    [ "tablename=s",  "tablename to create", ],
+    $class->options($app),
+  )
+}
+
 =attr tablename
 
 =cut

@@ -6,6 +6,10 @@ use App::ToSequel -command;
 use strict;
 use warnings;
 
+sub options {
+  return (
+  );
+}
 sub execute {
   my ($self, $opt, $args) = @_;
 

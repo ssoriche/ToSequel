@@ -7,9 +7,12 @@ use warnings;
 
 sub usage_desc { "tosequel %o [csvfile]" }
 
-sub opt_spec {
+sub options {
   return (
-    [ "tablename=s",  "tablename to create", ],
+    [ "headerfile=s",  "read column name and order from file", ],
+    [ "headers=s",  "column names and order", ],
+    [ "schema=s",  "schema to create table in", ],
+    [ "guess|G",  "using data guess at data types", ],
   );
 }
 
