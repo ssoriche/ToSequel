@@ -9,12 +9,13 @@ my $ddl = App::ToSequel::Command::ddl->new( {} );
 
 isa_ok( $ddl, 'App::ToSequel::Command::ddl' );
 
-$ddl->extract_columns( { filename => 't/data/simple.csv' } );
+$ddl->csv('t/data/simple.csv');
+$ddl->extract_columns;
 cmp_deeply(
   $ddl->columns,
   [
     { name => 'ColumnA', position => 0 },
     { name => 'ColumnB', position => 1 },
     { name => 'ColumnC', position => 2 },
-  ]
+  ], 'column names and positions'
 );
