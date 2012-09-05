@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 
-use Test::More tests => 5;
+use Test::More tests => 6;
 use Test::Deep;
 use Try::Tiny;
 
@@ -28,3 +28,8 @@ $inserts->csv('t/data/mismatched.csv');
 $inserts->tablename('mismatchedtable');
 $inserts->extract_columns;
 is($inserts->inserts,"INSERT INTO mismatchedtable (ColumnB,ColumnC,ColumnA) VALUES ('2012-09-05 13:51:22','1234.56','This is Column A');\nINSERT INTO mismatchedtable (ColumnB,ColumnC,ColumnA) VALUES ('2012-09-06 14:21:20','','missing');\nINSERT INTO mismatchedtable (ColumnB,ColumnC,ColumnA) VALUES ('2012-09-06 14:21:20','98765.321','longerest');\nINSERT INTO mismatchedtable (ColumnB,ColumnC,ColumnA) VALUES ('2012-09-06 14:21:20','98765.321','I''m in need of escaping');\n",'mismatched inserts');
+
+$inserts->csv('t/data/mismatched.csv');
+$inserts->tablename('mismatchedtable');
+$inserts->extract_columns;
+is($inserts->inserts({null => 1}),"INSERT INTO mismatchedtable (ColumnB,ColumnC,ColumnA) VALUES ('2012-09-05 13:51:22','1234.56','This is Column A');\nINSERT INTO mismatchedtable (ColumnB,ColumnC,ColumnA) VALUES ('2012-09-06 14:21:20',NULL,'missing');\nINSERT INTO mismatchedtable (ColumnB,ColumnC,ColumnA) VALUES ('2012-09-06 14:21:20','98765.321','longerest');\nINSERT INTO mismatchedtable (ColumnB,ColumnC,ColumnA) VALUES ('2012-09-06 14:21:20','98765.321','I''m in need of escaping');\n",'mismatched inserts w/NULL');

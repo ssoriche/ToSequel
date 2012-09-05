@@ -8,6 +8,7 @@ use warnings;
 
 sub options {
   return (
+    [ "null|N",  "treat empty data as NULL", ],
   );
 }
 sub execute {
@@ -17,11 +18,11 @@ sub execute {
   $self->csv($args->[0]);
 
   $self->extract_columns;
-  print $self->inserts;
+  print $self->inserts($opt);
 }
 
 sub inserts {
-  my ($self) = @_;
+  my ($self, $opt) = @_;
 
   my $inserts;
   while (my $row = $self->csv->fetchrow_hash) {
@@ -32,10 +33,16 @@ sub inserts {
     $inserts .= ") VALUES (";
     my $first = 1;
     for my $key (keys(%$row)) {
-      my $value = $row->{$key} // '';
+      my $value;
+      if($opt->{'null'}) {
+        $value = $row->{$key} // 'NULL';
+      }
+      else {
+        $value = $row->{$key} // '';
+      }
       $value =~ s/'/''/g;
       $inserts .= $first ? '' : ',';
-      $inserts .= "'$value'";
+      $inserts .= $value eq 'NULL' ? $value : "'$value'";
       $first = 0;
     }
     $inserts .= ");\n";
