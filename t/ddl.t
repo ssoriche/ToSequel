@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 
-use Test::More tests => 3;
+use Test::More tests => 4;
 use Test::Deep;
 
 use_ok('App::ToSequel::Command::ddl');
@@ -18,4 +18,14 @@ cmp_deeply(
     { name => 'ColumnB', position => 1 },
     { name => 'ColumnC', position => 2 },
   ], 'column names and positions'
+);
+
+$ddl->column_lengths;
+cmp_deeply(
+  $ddl->columns,
+  [
+    { name => 'ColumnA', position => 0, length => 16 },
+    { name => 'ColumnB', position => 1, length => 19 },
+    { name => 'ColumnC', position => 2, length => 9 },
+  ], 'column data lengths'
 );

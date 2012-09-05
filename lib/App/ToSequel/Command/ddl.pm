@@ -70,5 +70,17 @@ sub extract_columns {
   $self->columns(\@columnlist);
 }
 
+sub column_lengths {
+  my ($self) = @_;
+
+  while(my @row = $self->csv->get_row) {
+    for my $i (0..$#row) {
+      if(!defined(${$self->columns}[$i]->{length}) || ${$self->columns}[$i]->{length} < length($row[$i])) {
+        ${$self->columns}[$i]->{length} = length($row[$i]);
+      }
+    }
+  }
+}
+
 
 1;
