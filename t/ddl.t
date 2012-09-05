@@ -31,4 +31,4 @@ cmp_deeply(
 );
 
 $ddl->tablename('simpletable');
-is($ddl->ddl,"CREATE TABLE simpletable\n\tColumnA\tVARCHAR(16)\n\tColumnB\tVARCHAR(19)\n\tColumnC\tVARCHAR(9)\n;\n",'simple ddl');
+is($ddl->ddl,"CREATE TABLE simpletable (\n\t ColumnA\tVARCHAR(16)\n\t,ColumnB\tVARCHAR(19)\n\t,ColumnC\tVARCHAR(9)\n);\n",'simple ddl');
