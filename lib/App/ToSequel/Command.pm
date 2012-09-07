@@ -58,6 +58,26 @@ sub columns {
   return $self->{columns};
 }
 
+=attr ordered_columns
+
+=cut
+sub ordered_columns {
+  my ($self) = @_;
+  return $self->{ordered_columns} if($self->{ordered_columns});
+
+  my $columnlist;
+  push(@$columnlist, uc($_->{name})) for(@{$self->columns});
+  $self->_ordered_columns($columnlist);
+
+  return $self->{ordered_columns};
+}
+
+sub _ordered_columns {
+  my ($self,$args) = @_;
+
+  $self->{ordered_columns} = $args;
+}
+
 =attr csv($filename)
 
 Create a Text::xSV object from the filename.
@@ -84,6 +104,7 @@ sub extract_columns {
   my $columns = $self->csv->read_header;
 
   my @columnlist = map {name => $_, position => $columns->{$_}}, sort { $columns->{$a} <=> $columns->{$b} } keys(%$columns);
+  $self->_ordered_columns(undef);
   $self->columns(\@columnlist);
 }
 
