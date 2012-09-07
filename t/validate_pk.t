@@ -15,7 +15,7 @@ cmp_deeply(
   $validator->columns,
   [
     { name => 'ColumnA', position => 0 },
-    { name => 'ColumnB', position => 1 },
+    { name => 'Column1', position => 1 },
     { name => 'ColumnC', position => 2 },
   ], 'column names and positions'
 );
@@ -30,5 +30,5 @@ is($validator->validate_pk,1,'invalid keys');
 
 $validator->csv('t/data/duplicate_key.csv');
 $validator->extract_columns;
-$validator->pk('ColumnA,ColumnB');
+$validator->pk('ColumnA,Column1');
 is($validator->validate_pk,1,'invalid keys');

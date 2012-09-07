@@ -15,7 +15,7 @@ cmp_deeply(
   $ddl->columns,
   [
     { name => 'ColumnA', position => 0 },
-    { name => 'ColumnB', position => 1 },
+    { name => 'Column1', position => 1 },
     { name => 'ColumnC', position => 2 },
   ], 'column names and positions'
 );
@@ -24,7 +24,7 @@ cmp_deeply(
   $ddl->ordered_columns,
   [ qw(
       ColumnA
-      ColumnB
+      Column1
       ColumnC
     )],
   'ordered column list'
@@ -35,13 +35,13 @@ cmp_deeply(
   $ddl->columns,
   [
     { name => 'ColumnA', position => 0, length => 16 },
-    { name => 'ColumnB', position => 1, length => 19 },
+    { name => 'Column1', position => 1, length => 19 },
     { name => 'ColumnC', position => 2, length => 9 },
   ], 'column data lengths'
 );
 
 $ddl->tablename('simpletable');
-is($ddl->ddl,"CREATE TABLE simpletable (\n\t ColumnA\tVARCHAR(16)\n\t,ColumnB\tVARCHAR(19)\n\t,ColumnC\tVARCHAR(9)\n);\n",'simple ddl');
+is($ddl->ddl,"CREATE TABLE simpletable (\n\t ColumnA\tVARCHAR(16)\n\t,Column1\tVARCHAR(19)\n\t,ColumnC\tVARCHAR(9)\n);\n",'simple ddl');
 
 $ddl->csv('t/data/mismatched.csv');
 $ddl->extract_columns;
@@ -50,7 +50,7 @@ cmp_deeply(
   $ddl->columns,
   [
     { name => 'ColumnA', position => 0, length => 23 },
-    { name => 'ColumnB', position => 1, length => 19 },
+    { name => 'Column1', position => 1, length => 19 },
     { name => 'ColumnC', position => 2, length => 9 },
   ], 'column data lengths w/ mismatched columns'
 );
