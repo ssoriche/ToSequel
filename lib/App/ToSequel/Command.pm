@@ -66,7 +66,7 @@ sub ordered_columns {
   return $self->{ordered_columns} if($self->{ordered_columns});
 
   my $columnlist;
-  push(@$columnlist, uc($_->{name})) for(@{$self->columns});
+  push(@$columnlist, $_->{name}) for(@{$self->columns});
   $self->_ordered_columns($columnlist);
 
   return $self->{ordered_columns};

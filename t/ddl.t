@@ -23,9 +23,9 @@ cmp_deeply(
 cmp_deeply(
   $ddl->ordered_columns,
   [ qw(
-      COLUMNA
-      COLUMNB
-      COLUMNC
+      ColumnA
+      ColumnB
+      ColumnC
     )],
   'ordered column list'
 );
