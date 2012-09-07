@@ -24,27 +24,28 @@ sub execute {
 sub inserts {
   my ($self, $opt) = @_;
 
+  my $columns = $self->ordered_columns;
   my $inserts;
   while (my $row = $self->csv->fetchrow_hash) {
     $inserts .= 'INSERT INTO ';
     $inserts .= $self->tablename;
     $inserts .= ' (';
-    $inserts .= join(',',keys(%$row));
+    $inserts .= join(',',@$columns);
     $inserts .= ") VALUES (";
-    my $first = 1;
-    for my $key (keys(%$row)) {
+
+    my @values;
+    for my $column (@$columns) {
       my $value;
       if($opt->{'null'}) {
-        $value = $row->{$key} // 'NULL';
+        $value = $row->{$column} // 'NULL';
       }
       else {
-        $value = $row->{$key} // '';
+        $value = $row->{$column} // '';
       }
       $value =~ s/'/''/g;
-      $inserts .= $first ? '' : ',';
-      $inserts .= $value eq 'NULL' ? $value : "'$value'";
-      $first = 0;
+      push(@values,$value eq 'NULL' ? $value : "'$value'");
     }
+    $inserts .= join(',',@values);
     $inserts .= ");\n";
   }
 

@@ -40,13 +40,14 @@ sub validate_pk {
 
   my $error = 0;
   my %keylist = ();
+  my $columns = $self->ordered_columns;
   while (my $row = $self->csv->fetchrow_hash) {
     my $combined_key='';
     my $first = 1;
-    for my $key (keys(%$row)) {
-      next unless $self->pk->{uc($key)};
+    for my $column (@$columns) {
+      next unless $self->pk->{uc($column)};
       $combined_key .= $first ? '' : ',';
-      $combined_key .= $row->{$key};
+      $combined_key .= $row->{$column};
       $first = 0;
     }
     if($keylist{$combined_key}) {
