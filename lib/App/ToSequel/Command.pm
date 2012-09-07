@@ -41,13 +41,12 @@ sub schema {
 }
 
 =attr columns
-  [
-    { name
-      position
-      maxlength
-      datatype
+    { name => {
+        position
+        maxlength
+        datatype
+      }
     }
-  ]
 =cut
 
 sub columns {
@@ -65,9 +64,11 @@ sub ordered_columns {
   my ($self) = @_;
   return $self->{ordered_columns} if($self->{ordered_columns});
 
-  my $columnlist;
-  push(@$columnlist, $_->{name}) for(@{$self->columns});
-  $self->_ordered_columns($columnlist);
+  my $columns = $self->columns;
+  my @columnlist;
+
+  push(@columnlist, $_) for (sort { $columns->{$a}->{position} <=> $columns->{$b}->{position} } keys(%$columns));
+  $self->_ordered_columns(\@columnlist);
 
   return $self->{ordered_columns};
 }
@@ -103,9 +104,9 @@ sub extract_columns {
 
   my $columns = $self->csv->read_header;
 
-  my @columnlist = map {name => $_, position => $columns->{$_}}, sort { $columns->{$a} <=> $columns->{$b} } keys(%$columns);
+  my %columnlist = map {; $_ => {position => $columns->{$_}}} keys(%$columns);
   $self->_ordered_columns(undef);
-  $self->columns(\@columnlist);
+  $self->columns(\%columnlist);
 }
 
 

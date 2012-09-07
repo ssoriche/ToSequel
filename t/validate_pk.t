@@ -12,12 +12,11 @@ isa_ok( $validator, 'App::ToSequel::Command::validate_pk' );
 $validator->csv('t/data/simple.csv');
 $validator->extract_columns;
 cmp_deeply(
-  $validator->columns,
-  [
-    { name => 'ColumnA', position => 0 },
-    { name => 'Column1', position => 1 },
-    { name => 'ColumnC', position => 2 },
-  ], 'column names and positions'
+  $validator->columns, {
+    'ColumnA' => { position => 0 },
+    'Column1' => { position => 1 },
+    'ColumnC' => { position => 2 },
+  }, 'column names and positions'
 );
 
 $validator->pk('ColumnA');

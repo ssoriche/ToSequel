@@ -30,12 +30,11 @@ sub execute {
 sub column_lengths {
   my ($self) = @_;
 
-  while(my @row = $self->csv->get_row) {
-    for my $i (0..$#row) {
-      if(defined($row[$i])) {
-        if(!defined(${$self->columns}[$i]->{length}) || ${$self->columns}[$i]->{length} < length($row[$i])) {
-          ${$self->columns}[$i]->{length} = length($row[$i]);
-        }
+  while (my $row = $self->csv->fetchrow_hash) {
+    for my $column (keys($self->columns)) {
+      next unless(defined($row->{$column}));
+      if(!defined($self->columns->{$column}->{length}) || $self->columns->{$column}->{length} < length($row->{$column})) {
+        $self->columns->{$column}->{length} = length($row->{$column});
       }
     }
   }
@@ -46,12 +45,12 @@ sub ddl {
 
   my $ddl = 'CREATE TABLE ' . $self->tablename . " (\n";
   my $first = 1;
-  for my $column (@{$self->columns}) {
+  for my $column (@{$self->ordered_columns}) {
     $ddl .= "\t";
     $ddl .= $first ? ' ' : ',';
-    $ddl .= $column->{name} . "\t";
-    $ddl .= $column->{datatype} ? $column->{datatype} : 'VARCHAR';
-    $ddl .= '(' . $column->{length} . ')';
+    $ddl .= $column . "\t";
+    $ddl .= $self->columns->{$column}->{datatype} ? $column->{datatype} : 'VARCHAR';
+    $ddl .= '(' . $self->columns->{$column}->{length} . ')';
     $ddl .= "\n";
     $first = 0;
   }

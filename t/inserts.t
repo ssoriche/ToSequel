@@ -13,12 +13,11 @@ isa_ok( $inserts, 'App::ToSequel::Command::inserts' );
 $inserts->csv('t/data/simple.csv');
 $inserts->extract_columns;
 cmp_deeply(
-  $inserts->columns,
-  [
-    { name => 'ColumnA', position => 0 },
-    { name => 'Column1', position => 1 },
-    { name => 'ColumnC', position => 2 },
-  ], 'column names and positions'
+  $inserts->columns, {
+    'ColumnA' => { position => 0 },
+    'Column1' => { position => 1 },
+    'ColumnC' => { position => 2 },
+  }, 'column names and positions'
 );
 
 $inserts->tablename('simpletable');
