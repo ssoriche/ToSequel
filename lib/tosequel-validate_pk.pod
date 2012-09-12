@@ -1,0 +1,20 @@
+#PODNAME: tosequel-validate_pk
+#ABSTRACT: Convert formatted files into SQL statements
+
+=head1 Synopsis
+
+  tosequel [<options>] validate_pk [<command-options>] <filename>
+  tosequel [<options>] validate_pk --primary_key <columns> <filename>
+
+=head1 Description
+
+
+=head1 Command Options
+
+=over
+
+=item C<--primary_key|pk>
+
+Comma separated list of columns that comprise the primary key for the table
+
+=back

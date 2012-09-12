@@ -1,0 +1,38 @@
+#PODNAME: tosequel-ddl
+#ABSTRACT: Generate Create Table statements for data file
+
+=head1 Synopsis
+
+  tosequel [<options>] ddl [<command-options>] <filename>
+  tosequel [<options>] ddl --tablename rawdata <filename>
+
+=head1 Description
+
+tosequel-ddl reads in the formatted datafile, extracts the column names from
+the header, calculates the data type legnth for each column and generates the
+appropriate CREATE statement.
+
+  tosequel ddl --tablename inputdata inputdata.csv
+
+inputdata.csv
+
+  ColumnA,Column1,ColumnC
+  This is Column A,2012-09-05 13:51:22,1234.56
+  short,2012-09-06 14:21:20,98765.321
+
+Output
+
+  CREATE TABLE inputdata (
+     ColumnA  VARCHAR(16)
+    ,Column1  VARCHAR(19)
+    ,ColumnC  VARCHAR(9)
+  );
+
+
+=head1 Options
+
+=over
+
+=item C<--tablename>
+
+=back

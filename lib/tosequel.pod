@@ -1,0 +1,29 @@
+#PODNAME: tosequel
+#ABSTRACT: Convert formatted files into SQL statements
+
+=head1 Synopsis
+
+  tosequel [<options>] <command> [<command-options>] <filename>
+
+=head1 Description
+
+
+=head1 Commands
+
+=over
+
+=item inserts
+
+=item ddl
+
+=item validate_pk
+
+=back
+
+=head1 Options
+
+=over
+
+=item C<--tablename>
+
+=back

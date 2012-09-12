@@ -1,0 +1,19 @@
+#PODNAME: tosequel-inserts
+#ABSTRACT: Create INSERT statements for each line of data
+
+=head1 Synopsis
+
+  tosequel [<options>] inserts [<command-options>] <filename>
+
+=head1 Description
+
+
+=head1 Command Options
+
+=over
+
+=item C<--null|N>
+
+If data is an empty string or unavailable use NULL as the value.
+
+=back
