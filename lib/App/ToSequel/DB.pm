@@ -1,6 +1,26 @@
+package App::ToSequel::DB;
+
+#ABSTRACT: Database engine interface
+
+use App::ToSequel::DB::Default;
+
 =attr db
 
 =cut
+sub db {
+  my ($self, $args) = @_;
+
+  unless($self->{db}) {
+    if($args) {
+      $self->{db} = $args;
+    }
+    else {
+      $self->{db} = App::ToSequel::DB::Default->new;
+    }
+  }
+
+  return $self->{db};
+}
 
 =attr command_option
 
@@ -57,3 +77,12 @@ sub varchar {
 
   return 'VARCHAR('. $args->{length} . ')';
 }
+
+sub new {
+  my $class = shift;
+  $class = ref $class if ref $class;
+  my $self = bless {}, $class;
+  $self;
+}
+
+1;
