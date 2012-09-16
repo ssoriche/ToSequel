@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 
-use Test::More tests => 8;
+use Test::More tests => 9;
 use Test::Deep;
 
 use_ok('App::ToSequel::Command::ddl');
@@ -63,3 +63,6 @@ cmp_deeply(
     'Column0' => { position => 3, length => 9, datatype => 'date' },
   }, 'column data lengths w/ mismatched columns'
 );
+
+$ddl->tablename('datatype');
+is($ddl->ddl({ 'detect' => 1}),"CREATE TABLE datatype (\n\t ColumnA\tVARCHAR(23)\n\t,Column1\tTIMESTAMP\n\t,ColumnC\tNUMERIC(9)\n\t,Column0\tDATE\n);\n",'datatyped ddl');
