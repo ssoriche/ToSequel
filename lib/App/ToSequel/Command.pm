@@ -12,6 +12,7 @@ sub opt_spec {
   return (
     [ 'help' => "This usage screen" ],
     [ "tablename=s",  "tablename to create", ],
+    [ "detect|D",  "detect data types", ],
     $class->options($app),
   )
 }
