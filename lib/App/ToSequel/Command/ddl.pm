@@ -23,12 +23,12 @@ sub execute {
   $self->csv($args->[0]);
 
   $self->extract_columns;
-  $self->column_lengths;
+  $self->column_lengths($opt);
   print $self->ddl;
 }
 
 sub column_lengths {
-  my ($self) = @_;
+  my ($self,$args) = @_;
 
   while (my $row = $self->csv->fetchrow_hash) {
     for my $column (keys($self->columns)) {
