@@ -1,0 +1,5 @@
+ColumnA,Column1,ColumnC,Column0
+This is Column A,2012-09-05 13:51:22,1234.56,12-JUL-73
+missing,2012-09-06 14:21:20,,09-JAN-10
+longerest,2012-09-06 14:21:20,98765.321,04-APR-12
+I'm in need of escaping,2012-09-06 14:21:20,98765.321,31-AUG-00

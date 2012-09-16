@@ -5,6 +5,8 @@ use App::ToSequel -command;
 use strict;
 use warnings;
 
+use DateTime::Format::Natural;
+
 sub usage_desc { "tosequel %o [csvfile]" }
 
 sub options {
@@ -35,6 +37,27 @@ sub column_lengths {
       next unless(defined($row->{$column}));
       if(!defined($self->columns->{$column}->{length}) || $self->columns->{$column}->{length} < length($row->{$column})) {
         $self->columns->{$column}->{length} = length($row->{$column});
+      }
+      if($args->{detect}) {
+        unless($self->columns->{$column}->{datatype} && $self->columns->{$column}->{datatype} eq 'varchar') {
+          my $parser =  DateTime::Format::Natural->new;
+          my $dt = $parser->parse_datetime($row->{$column});
+          if($parser->success) {
+            if($dt->hour) {
+              $self->columns->{$column}->{datatype} = 'timestamp';
+            }
+            else {
+              $self->columns->{$column}->{datatype} = 'date'
+                unless ( $self->columns->{$column}->{datatype} && $self->columns->{$column}->{datatype} eq 'timestamp' );
+            }
+          }
+          elsif($row->{$column} =~ /^[\d]+\.?[\d]+$/) {
+            $self->columns->{$column}->{datatype} = 'numeric';
+          }
+          elsif($row->{$column} =~ /^[\w\s]+$/) {
+            $self->columns->{$column}->{datatype} = 'varchar';
+          }
+        }
       }
     }
   }
