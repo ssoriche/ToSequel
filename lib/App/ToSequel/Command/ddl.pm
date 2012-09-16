@@ -26,7 +26,7 @@ sub execute {
 
   $self->extract_columns;
   $self->column_lengths($opt);
-  print $self->ddl;
+  print $self->ddl($opt);
 }
 
 sub column_lengths {
@@ -64,7 +64,7 @@ sub column_lengths {
 }
 
 sub ddl {
-  my ($self) = @_;
+  my ($self,$args) = @_;
 
   my $ddl = 'CREATE TABLE ' . $self->tablename . " (\n";
   my $first = 1;
@@ -72,8 +72,16 @@ sub ddl {
     $ddl .= "\t";
     $ddl .= $first ? ' ' : ',';
     $ddl .= $column . "\t";
-    $ddl .= $self->columns->{$column}->{datatype} ? $column->{datatype} : 'VARCHAR';
-    $ddl .= '(' . $self->columns->{$column}->{length} . ')';
+    if($args->{detect}) {
+      my $datatype = $self->columns->{$column}->{datatype};
+      $ddl .= $self->db->$datatype( {
+          length     => $self->columns->{$column}->{length},
+          preceision => $self->columns->{$column}->{precision} } );
+    }
+    else {
+      $ddl .= 'VARCHAR';
+      $ddl .= '(' . $self->columns->{$column}->{length} . ')';
+    }
     $ddl .= "\n";
     $first = 0;
   }
