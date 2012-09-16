@@ -6,6 +6,7 @@ use strict;
 use warnings;
 
 use Text::xSV;
+use App::ToSequel::DB;
 
 sub opt_spec {
   my ( $class, $app ) = @_;
@@ -110,5 +111,13 @@ sub extract_columns {
   $self->columns(\%columnlist);
 }
 
+sub db {
+  my ($self) = @_;
+
+  unless($self->{db}) {
+    $self->{db} = App::ToSequel::DB->new;
+  }
+  return $self->{db};
+}
 
 1;
