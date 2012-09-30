@@ -59,7 +59,7 @@ cmp_deeply(
   $ddl->columns, {
     'ColumnA' => { position => 0, length => 23, datatype => 'varchar' },
     'Column1' => { position => 1, length => 19, datatype => 'timestamp' },
-    'ColumnC' => { position => 2, length => 9, datatype => 'numeric' },
+    'ColumnC' => { position => 2, length => 9, precision => 3, datatype => 'numeric' },
     'Column0' => { position => 3, length => 9, datatype => 'date' },
   }, 'column data lengths w/ mismatched columns'
 );

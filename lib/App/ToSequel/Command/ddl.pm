@@ -51,8 +51,9 @@ sub column_lengths {
                 unless ( $self->columns->{$column}->{datatype} && $self->columns->{$column}->{datatype} eq 'timestamp' );
             }
           }
-          elsif($row->{$column} =~ /^[\d]+\.?[\d]+$/) {
+          elsif($row->{$column} =~ /^[\d]+\.?([\d]+)$/) {
             $self->columns->{$column}->{datatype} = 'numeric';
+            $self->columns->{$column}->{precision} = length($1) if(!defined($self->columns->{$column}->{precision}) || length($self->columns->{$column}->{precision}) < length($1));
           }
           elsif($row->{$column} =~ /^[\w\s]+$/) {
             $self->columns->{$column}->{datatype} = 'varchar';

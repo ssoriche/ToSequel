@@ -47,6 +47,7 @@ sub schema {
         position
         maxlength
         datatype
+        precision
       }
     }
 =cut
