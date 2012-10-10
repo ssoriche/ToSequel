@@ -45,6 +45,9 @@ sub column_lengths {
           if($parser->success) {
             if($dt->hour) {
               $self->columns->{$column}->{datatype} = 'timestamp';
+              if($dt->millisecond) {
+                $self->columns->{$column}->{precision} = length($dt->millisecond);
+              }
             }
             else {
               $self->columns->{$column}->{datatype} = 'date'
