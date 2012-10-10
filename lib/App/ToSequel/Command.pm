@@ -5,7 +5,7 @@ use App::Cmd::Setup -command;
 use strict;
 use warnings;
 
-use Text::xSV;
+use App::ToSequel::CSV;
 
 sub opt_spec {
   my ( $class, $app ) = @_;
@@ -87,8 +87,8 @@ Create a Text::xSV object from the filename.
 sub csv {
   my ($self, $filename) = @_;
   if ($filename) {
-    $self->{csv} = Text::xSV->new( warning_handler => sub {} );
-    $self->{csv}->open_file($filename);
+    $self->{csv} = App::ToSequel::CSV->new;
+    $self->{csv}->filename($filename);
   }
 
   return $self->{csv};
