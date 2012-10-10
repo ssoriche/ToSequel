@@ -57,12 +57,12 @@ $ddl->extract_columns;
 $ddl->column_lengths({ 'detect' => 1 });
 cmp_deeply(
   $ddl->columns, {
-    'ColumnA' => { position => 0, length => 23, datatype => 'varchar' },
+    'ColumnA' => { position => 0, length => 25, datatype => 'varchar' },
     'Column1' => { position => 1, length => 21, datatype => 'timestamp' },
     'ColumnC' => { position => 2, length => 9, precision => 3, datatype => 'numeric' },
-    'Column0' => { position => 3, length => 9, datatype => 'date' },
+    'Column0' => { position => 3, length => 10, datatype => 'date' },
   }, 'column data lengths w/ mismatched columns'
 );
 
 $ddl->tablename('datatype');
-is($ddl->ddl({ 'detect' => 1}),"CREATE TABLE datatype (\n\t ColumnA\tVARCHAR(23)\n\t,Column1\tTIMESTAMP\n\t,ColumnC\tNUMERIC(9)\n\t,Column0\tDATE\n);\n",'datatyped ddl');
+is($ddl->ddl({ 'detect' => 1}),"CREATE TABLE datatype (\n\t ColumnA\tVARCHAR(25)\n\t,Column1\tTIMESTAMP\n\t,ColumnC\tNUMERIC(9)\n\t,Column0\tDATE\n);\n",'datatyped ddl');
