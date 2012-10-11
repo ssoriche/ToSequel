@@ -31,35 +31,40 @@ sub execute {
 
 sub column_lengths {
   my ($self,$args) = @_;
+  my $parser =  DateTime::Format::Natural->new;
+  my $row_count = 0;
+  my $sample_size = $args->{sample} || 500;
 
   while (my $row = $self->csv->fetchrow_hash) {
+    $row_count++;
     for my $column (keys($self->columns)) {
       next unless(defined($row->{$column}));
       if(!defined($self->columns->{$column}->{length}) || $self->columns->{$column}->{length} < length($row->{$column})) {
         $self->columns->{$column}->{length} = length($row->{$column});
       }
-      if($args->{detect}) {
-        unless($self->columns->{$column}->{datatype} && $self->columns->{$column}->{datatype} eq 'varchar') {
-          my $parser =  DateTime::Format::Natural->new;
-          my $dt = $parser->parse_datetime($row->{$column});
-          if($parser->success) {
-            if($dt->hour) {
-              $self->columns->{$column}->{datatype} = 'timestamp';
-              if($dt->millisecond) {
-                $self->columns->{$column}->{precision} = length($dt->millisecond);
-              }
-            }
-            else {
-              $self->columns->{$column}->{datatype} = 'date'
-                unless ( $self->columns->{$column}->{datatype} && $self->columns->{$column}->{datatype} eq 'timestamp' );
-            }
-          }
-          elsif($row->{$column} =~ /^[\d]+\.?([\d]+)$/) {
+      if($args->{detect} && $row_count < $sample_size) {
+        if(!defined($self->columns->{$column}->{datatype}) || $self->columns->{$column}->{datatype} ne 'varchar') {
+          if($row->{$column} =~ /^[\d]+\.?([\d]+)$/) {
             $self->columns->{$column}->{datatype} = 'numeric';
             $self->columns->{$column}->{precision} = length($1) if(!defined($self->columns->{$column}->{precision}) || length($self->columns->{$column}->{precision}) < length($1));
           }
-          elsif($row->{$column} =~ /^[\w\s]+$/) {
-            $self->columns->{$column}->{datatype} = 'varchar';
+          else {
+            my $dt = $parser->parse_datetime($row->{$column});
+            if($parser->success) {
+              if($dt->hour) {
+                $self->columns->{$column}->{datatype} = 'timestamp';
+                if($dt->millisecond) {
+                  $self->columns->{$column}->{precision} = length($dt->millisecond);
+                }
+              }
+              else {
+                $self->columns->{$column}->{datatype} = 'date'
+                  unless ( $self->columns->{$column}->{datatype} && $self->columns->{$column}->{datatype} eq 'timestamp' );
+              }
+            }
+            elsif($row->{$column} =~ /^[\w\s]+$/) {
+              $self->columns->{$column}->{datatype} = 'varchar';
+            }
           }
         }
       }
@@ -77,7 +82,7 @@ sub ddl {
     $ddl .= $first ? ' ' : ',';
     $ddl .= $column . "\t";
     if($args->{detect}) {
-      my $datatype = $self->columns->{$column}->{datatype};
+      my $datatype = $self->columns->{$column}->{datatype} || 'varchar';
       $ddl .= $self->db->$datatype( {
           length     => $self->columns->{$column}->{length},
           preceision => $self->columns->{$column}->{precision} } );
