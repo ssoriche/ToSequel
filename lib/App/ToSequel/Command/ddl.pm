@@ -44,9 +44,11 @@ sub column_lengths {
       }
       if($args->{detect} && $row_count < $sample_size) {
         if(!defined($self->columns->{$column}->{datatype}) || $self->columns->{$column}->{datatype} ne 'varchar') {
-          if($row->{$column} =~ /^[\d]+\.?([\d]+)$/) {
+          if($row->{$column} =~ /^[\d]+\.?([\d]+)?$/) {
             $self->columns->{$column}->{datatype} = 'numeric';
-            $self->columns->{$column}->{precision} = length($1) if(!defined($self->columns->{$column}->{precision}) || length($self->columns->{$column}->{precision}) < length($1));
+            if($1 && (!defined($self->columns->{$column}->{precision}) || $self->columns->{$column}->{precision} < length($1))) {
+              $self->columns->{$column}->{precision} = length($1);
+            }
           }
           else {
             my $dt = $parser->parse_datetime($row->{$column});
