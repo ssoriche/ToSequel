@@ -82,3 +82,18 @@ cmp_deeply(
     'ColumnZ' => { position => 5, length => 19, datatype => 'timestamp' },
   }, 'sample limit - column data lengths w/ mismatched columns'
 );
+
+$ddl->csv('t/data/quoted_datatype.csv');
+$ddl->extract_columns;
+$ddl->column_lengths({ 'detect' => 1 });
+
+cmp_deeply(
+  $ddl->columns, {
+    'ColumnA' => { position => 0, length => 25, datatype => 'varchar' },
+    'Column1' => { position => 1, length => 21, precision => 1, datatype => 'timestamp' },
+    'ColumnC' => { position => 2, length => 9, precision => 3, datatype => 'numeric' },
+    'Column0' => { position => 3, length => 10, datatype => 'date' },
+    'Column8' => { position => 4, length => 8, datatype => 'numeric' },
+    'ColumnZ' => { position => 5, length => 19, datatype => 'timestamp' },
+  }, 'quoted data - column data lengths w/ mismatched columns'
+);
