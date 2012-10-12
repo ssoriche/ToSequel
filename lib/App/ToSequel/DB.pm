@@ -1,5 +1,8 @@
 package App::ToSequel::DB;
 
+use strict;
+use warnings;
+
 #ABSTRACT: Database engine interface
 
 use App::ToSequel::DB::Default;
