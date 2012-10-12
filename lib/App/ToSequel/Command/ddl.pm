@@ -33,7 +33,7 @@ sub column_lengths {
   my ($self,$args) = @_;
   my $parser =  DateTime::Format::Natural->new;
   my $row_count = 0;
-  my $sample_size = $args->{sample} || 500;
+  my $sample_size = $args->{sample} || 2000;
 
   while (my $row = $self->csv->fetchrow_hash) {
     $row_count++;

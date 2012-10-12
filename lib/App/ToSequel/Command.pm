@@ -14,7 +14,7 @@ sub opt_spec {
     [ 'help' => "This usage screen" ],
     [ "tablename=s",  "tablename to create", ],
     [ "detect|D",  "detect data types", ],
-    [ "sample|s=i", "Limit detect to a number of lines", { default => 500 }],
+    [ "sample|s=i", "Limit detect to a number of lines", { default => 2000 }],
     $class->options($app),
   )
 }
