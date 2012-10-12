@@ -53,8 +53,8 @@ sub column_lengths {
             if($parser->success) {
               if($dt->hour) {
                 $self->columns->{$column}->{datatype} = 'timestamp';
-                if($dt->millisecond) {
-                  $self->columns->{$column}->{precision} = length($dt->millisecond);
+                if($dt->nanosecond) {
+                  $self->columns->{$column}->{precision} = length($dt->nanosecond);
                 }
               }
               else {
@@ -85,7 +85,7 @@ sub ddl {
       my $datatype = $self->columns->{$column}->{datatype} || 'varchar';
       $ddl .= $self->db->$datatype( {
           length     => $self->columns->{$column}->{length},
-          preceision => $self->columns->{$column}->{precision} } );
+          precision => $self->columns->{$column}->{precision} } );
     }
     else {
       $ddl .= 'VARCHAR';

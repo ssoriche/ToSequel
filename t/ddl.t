@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 
-use Test::More tests => 10;
+use Test::More tests => 11;
 use Test::Deep;
 
 use_ok('App::ToSequel::Command::ddl');
@@ -58,14 +58,16 @@ $ddl->column_lengths({ 'detect' => 1 });
 cmp_deeply(
   $ddl->columns, {
     'ColumnA' => { position => 0, length => 25, datatype => 'varchar' },
-    'Column1' => { position => 1, length => 21, datatype => 'timestamp' },
+    'Column1' => { position => 1, length => 21, precision => 1, datatype => 'timestamp' },
     'ColumnC' => { position => 2, length => 9, precision => 3, datatype => 'numeric' },
     'Column0' => { position => 3, length => 10, datatype => 'date' },
+    'Column8' => { position => 4, length => 8, datatype => 'numeric' },
+    'ColumnZ' => { position => 5, length => 19, datatype => 'timestamp' },
   }, 'detect datatypes - column data lengths w/ mismatched columns'
 );
 
 $ddl->tablename('datatype');
-is($ddl->ddl({ 'detect' => 1}),"CREATE TABLE datatype (\n\t ColumnA\tVARCHAR(25)\n\t,Column1\tTIMESTAMP\n\t,ColumnC\tNUMERIC(9)\n\t,Column0\tDATE\n);\n",'datatyped ddl');
+is($ddl->ddl({ 'detect' => 1}),"CREATE TABLE datatype (\n\t ColumnA\tVARCHAR(25)\n\t,Column1\tTIMESTAMP\n\t,ColumnC\tNUMERIC(9,3)\n\t,Column0\tDATE\n\t,Column8\tNUMERIC(8)\n\t,ColumnZ\tTIMESTAMP\n);\n",'datatyped ddl');
 
 $ddl->csv('t/data/datatype.csv');
 $ddl->extract_columns;
@@ -76,5 +78,7 @@ cmp_deeply(
     'Column1' => { position => 1, length => 21, datatype => 'timestamp' },
     'ColumnC' => { position => 2, length => 9, precision => 2, datatype => 'numeric' },
     'Column0' => { position => 3, length => 10, datatype => 'date' },
+    'Column8' => { position => 4, length => 8, datatype => 'numeric' },
+    'ColumnZ' => { position => 5, length => 19, datatype => 'timestamp' },
   }, 'sample limit - column data lengths w/ mismatched columns'
 );

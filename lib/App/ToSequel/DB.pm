@@ -36,7 +36,15 @@ sub numeric {
     return $self->db->numeric($args);
   }
 
-  return 'NUMERIC('. $args->{length} . ')';
+  my $definition;
+  if($args->{precision}) {
+    $definition = 'NUMERIC('. $args->{length} . ',' . $args->{precision} . ')';
+  }
+  else {
+    $definition = 'NUMERIC('. $args->{length} . ')';
+  }
+
+  return $definition;
 }
 
 =attr date
