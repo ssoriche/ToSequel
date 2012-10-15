@@ -5,7 +5,7 @@ use App::ToSequel -command;
 use strict;
 use warnings;
 
-use DateTime::Format::Natural;
+use App::ToSequel::DateTime::Format::SQL;
 
 sub usage_desc { "tosequel %o [csvfile]" }
 
@@ -31,9 +31,9 @@ sub execute {
 
 sub column_lengths {
   my ($self,$args) = @_;
-  my $parser =  DateTime::Format::Natural->new;
   my $row_count = 0;
   my $sample_size = $args->{sample} || 2000;
+  my $parser = App::ToSequel::DateTime::Format::SQL->new;
 
   while (my $row = $self->csv->fetchrow_hash) {
     $row_count++;
@@ -52,7 +52,7 @@ sub column_lengths {
           }
           else {
             my $dt = $parser->parse_datetime($row->{$column});
-            if($parser->success) {
+            if($dt) {
               if($dt->hour) {
                 $self->columns->{$column}->{datatype} = 'timestamp';
                 if($dt->nanosecond) {
